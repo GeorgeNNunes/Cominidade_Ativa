@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Início | Comunidade Ativa{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">Sua comunidade em movimento</p>
+  <h1>Problemas do bairro, registrados em um só lugar.</h1>
+  <p>Consulte ocorrências comunitárias e acompanhe os relatos publicados.</p>
+  {% if logged_user %}<a class="button" href="{{ url_for('new_report') }}">Registrar ocorrência</a>
+  {% else %}<a class="button" href="{{ url_for('register') }}">Começar agora</a>{% endif %}
+</section>
+<form class="filters" method="get">
+  <input name="q" value="{{ search }}" placeholder="Buscar por título, descrição ou bairro">
+  <select name="category">
+    <option value="">Todas as categorias</option>
+    {% for item in categories %}
+      <option value="{{ item }}" {% if selected_category == item %}selected{% endif %}>{{ item }}</option>
+    {% endfor %}
+  </select>
+  <button class="button" type="submit">Buscar</button>
+</form>
+<h2>Ocorrências recentes</h2>
+<div class="cards">
+{% for report in reports %}
+  <article class="report-card">
+    {% if report.photo_filename %}
+      <img class="thumb" src="{{ url_for('uploaded_file', filename=report.photo_filename) }}" alt="Foto da ocorrência">
+    {% else %}<div class="no-photo">Sem foto</div>{% endif %}
+    <div class="card-body">
+      <span class="tag">{{ report.category }}</span>
+      <h3><a href="{{ url_for('report_detail', report_id=report.id) }}">{{ report.title }}</a></h3>
+      <p>{{ report.description[:150] }}{% if report.description|length > 150 %}…{% endif %}</p>
+      <small>{{ report.neighborhood }} · {{ report.status }} · por {{ report.author }}</small>
+    </div>
+  </article>
+{% else %}
+  <p class="empty">Nenhuma ocorrência encontrada. Seja o primeiro a registrar uma.</p>
+{% endfor %}
+</div>
+{% endblock %}
