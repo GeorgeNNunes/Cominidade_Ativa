@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Nova ocorrência{% endblock %}
+{% block content %}
+<div class="form-panel wide">
+<h1>Registrar ocorrência</h1>
+<p>Informe o problema observado. A foto é opcional e será ajustada para 600 × 600 pixels.</p>
+<form method="post" enctype="multipart/form-data">
+  <label>Título<input name="title" maxlength="120" required></label>
+  <label>Categoria
+    <select name="category" required>
+      <option value="">Selecione</option>
+      {% for item in ["Iluminação", "Limpeza urbana", "Infraestrutura", "Saneamento", "Acessibilidade", "Outro"] %}
+        <option>{{ item }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Bairro ou localidade<input name="neighborhood" maxlength="120" required></label>
+  <label>Descrição<textarea name="description" rows="5" maxlength="2000" required></textarea></label>
+  <label>Foto (uma por relato; JPG, PNG ou WEBP; até 5 MB)
+    <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+  </label>
+  <button class="button" type="submit">Publicar ocorrência</button>
+</form>
+</div>
+{% endblock %}
