@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Minhas ocorrências{% endblock %}
+{% block content %}
+<h1>Minhas ocorrências</h1>
+<div class="cards">
+{% for report in reports %}
+  <article class="report-card">
+    {% if report.photo_filename %}<img class="thumb" src="{{ url_for('uploaded_file', filename=report.photo_filename) }}" alt="Foto da ocorrência">
+    {% else %}<div class="no-photo">Sem foto</div>{% endif %}
+    <div class="card-body">
+      <span class="tag">{{ report.status }}</span>
+      <h3><a href="{{ url_for('report_detail', report_id=report.id) }}">{{ report.title }}</a></h3>
+      <p>{{ report.category }} · {{ report.neighborhood }}</p>
+      <form method="post" action="{{ url_for('delete_report', report_id=report.id) }}" onsubmit="return confirm('Deseja excluir esta ocorrência?')">
+        <button class="button danger-button" type="submit">Excluir</button>
+      </form>
+    </div>
+  </article>
+{% else %}<p class="empty">Você ainda não cadastrou ocorrências.</p>{% endfor %}
+</div>
+{% endblock %}
