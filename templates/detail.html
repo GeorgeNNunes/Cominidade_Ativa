@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ report.title }}{% endblock %}
+{% block content %}
+<article class="detail">
+  {% if report.photo_filename %}<img class="detail-photo" src="{{ url_for('uploaded_file', filename=report.photo_filename) }}" alt="Foto da ocorrência">{% endif %}
+  <span class="tag">{{ report.category }} · {{ report.status }}</span>
+  <h1>{{ report.title }}</h1>
+  <p>{{ report.description }}</p>
+  <p><strong>Local:</strong> {{ report.neighborhood }}</p>
+  <p><strong>Registrado por:</strong> {{ report.author }}</p>
+  {% if logged_user and logged_user.id == report.user_id %}
+    <form method="post" action="{{ url_for('delete_report', report_id=report.id) }}" onsubmit="return confirm('Deseja excluir esta ocorrência?')">
+      <button class="button danger-button" type="submit">Excluir ocorrência</button>
+    </form>
+  {% endif %}
+</article>
+{% endblock %}
